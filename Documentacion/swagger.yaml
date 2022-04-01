@@ -1,0 +1,172 @@
+swagger: "2.0"
+info:
+  title: "API - Placeholder - Test"
+  description: "Este es un ejemplo de prueba de la API Placeholder con relación a la sección albums"
+  version: 1.0.0
+host: localhost:3000
+tags:
+- name: albums
+  description: Este endpoint maneja la información relacionada con los titulos de cada albums con los userID correspondiente.
+schemes:
+  - http
+  - https
+
+consumes:
+  - application/json
+produces:
+  - application/json
+  
+paths:
+  /albums:
+    get:
+     description: Para obtener el listado de los albums
+     responses:
+        200:
+          description: (OK)
+        default:
+          description: Error
+
+    post:
+      summary: "Agregar un nuevo albums a la lista"
+      description: ""
+      parameters:
+        - name : body
+          in : body
+          description: "Propiedad del nuevo album"
+          required: true
+          schema:
+            $ref:"#/definitions/albums"
+      responses:
+       "200":
+         description: Success
+         schema:
+            $ref: "#/definitions/GeneralResponse"
+       default:
+         description: Error
+        
+  
+  /albums/{id}:
+    x-swagger-router-controller: albums
+    get:
+      summary: "Obtener un album especifico por id"
+      description: ""
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/GetAlbumsResponse"
+        default:
+          description: Error
+         
+    put:
+      summary: "Actualizar un albums"
+      description: ""
+      parameters:
+        - name: id
+          description: ID del albums
+          type: string
+          in: path
+          required: true
+        - name: body
+          description: Propiedades del albums
+          in: body
+          schema:
+            $ref: "#/definitions/album"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/GeneralResponse"
+        default:
+          description: Error
+          
+            
+    delete:
+      description: Eliminar un album
+      parameters:
+        - name: id
+          description: ID del albums
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/GeneralResponse"
+        default:
+          description: Error
+       
+ 
+definitions:
+  GetAlbumsListResponse:
+      required:
+      - albums
+      properties:
+        albums:
+          type: array
+          items:
+              type: object
+          properties:
+              title:
+                type: string
+              userId:
+                type: string
+          
+  album:
+    type: object
+    properties:
+      id: 
+        type: string
+        description: ID del album
+      title:
+        type: string
+        description: Nombre del titulo
+      userId:
+        type: number
+        description: ID del usuario
+        required:
+          - title
+          - userId
+        
+  GeneralResponse:
+        type: object
+        properties:
+          success:
+            type: string
+            description: "Si es 1 es OK"
+          description:
+            type: string
+            description: Se ha eliminado un album
+        required:
+          - success
+          - description
+          
+  GetAlbumsResponse:
+      type: object
+      required:
+        - userId
+        - title
+      properties:
+        title:
+          type: string
+        userId:
+          type: string
+  albums:
+      type: object
+      properties:
+          title:
+              type: string
+              description: Nombre del titulo
+          userId:
+              type: number
+              description: ID del usuario
+      required:
+          - title
+          - userId
+ 
